@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 600px;
+            height: 300px;
+            display: grid;
+            place-items: center;
+        }
+
+        .wrapper .item {
+            border-radius: .5rem;
+            opacity: 0;
+            transition: 500ms cubic-bezier(0.19, 1, 0.22, 1);
+            position: absolute;
+            width: 300px;
+            aspect-ratio: 1;
+            background: var(--background);
+        }
+
+        .item.visible {
+            opacity: 1;
+        }
+
+        .item.active {
+            opacity: 1;
+            height: 400px;
+            transform: translateX(0) !important;
+            z-index: 99;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div style="display: flex">
+        <button id="prev">prev</button>
+        <button id="next">next</button>
+    </div>
+    <div class="wrapper">
+        <div data-queue="0" class="item" style="--background: red"></div>
+        <div data-queue="1" class="item active" style="--background: pink"></div>
+        <div data-queue="2" class="item" style="--background: orange"></div>
+        <div data-queue="3" class="item" style="--background: blue"></div>
+        <div data-queue="4" class="item" style="--background: green"></div>
+        <div data-queue="5" class="item" style="--background: yellow"></div>
+    </div>
+
+    <script>
+        const wrapper = document.querySelector(".wrapper")
+        const items = document.querySelectorAll(".item")
+
+        function useCarousel() {
+            const activeItem = document.querySelector(".item.active")
+            if (!activeItem) return
+
+            const currentIndex = Number(activeItem.dataset.queue)
+            const totalItems = items.length - 1
+
+            if (activeItem.nextElementSibling) {
+                activeItem.nextElementSibling.classList.add("visible")
+            }
+
+            if (activeItem.previousElementSibling) {
+                activeItem.previousElementSibling.classList.add("visible")
+            }
+
+
+            let counter = 0
+            for (let i = currentIndex + 1; i <= totalItems; i++) {
+                counter++
+                document.querySelector(`.item[data-queue="${i}"]`).style.transform = `translateX(${counter * 10}%)`
+                console.log(i);
+            }
+            counter = 0
+            for (let i = currentIndex - 1; i >= 0; i--) {
+                counter++
+                document.querySelector(`.item[data-queue="${i}"]`).style.transform = `translateX(-${counter * 10}%)`
+
+            }
+        }
+
+        useCarousel()
+
+        document.getElementById("next").addEventListener("click", () => {
+            const current = document.querySelector(".item.active")
+            document.querySelectorAll(".item.visible").forEach(x => x.classList.remove("visible"))
+            const nextItem = current.nextElementSibling
+            if (nextItem) {
+                current.classList.remove("active")
+                nextItem.classList.add("active")
+                useCarousel()
+            }
+        })
+
+        document.getElementById("prev").addEventListener("click", () => {
+            const current = document.querySelector(".item.active")
+            document.querySelectorAll(".item.visible").forEach(x => x.classList.remove("visible"))
+            const prevItem = current.previousElementSibling
+            if (prevItem) {
+                current.classList.remove("active")
+                prevItem.classList.add("active")
+                useCarousel()
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
