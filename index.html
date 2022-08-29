@@ -104,7 +104,9 @@
 
         document.getElementById("next").addEventListener("click", () => {
             const current = document.querySelector(".item.active")
-            document.querySelectorAll(".item.visible").forEach(x => x.classList.remove("visible"))
+            if (current.nextElementSibling) {
+                document.querySelectorAll(".item.visible").forEach(x => x.classList.remove("visible"))
+            }
             const nextItem = current.nextElementSibling
             if (nextItem) {
                 current.classList.remove("active")
@@ -115,7 +117,9 @@
 
         document.getElementById("prev").addEventListener("click", () => {
             const current = document.querySelector(".item.active")
-            document.querySelectorAll(".item.visible").forEach(x => x.classList.remove("visible"))
+            if (current.previousElementSibling) {
+                document.querySelectorAll(".item.visible").forEach(x => x.classList.remove("visible"))
+            }
             const prevItem = current.previousElementSibling
             if (prevItem) {
                 current.classList.remove("active")
